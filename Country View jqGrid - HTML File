@@ -1,0 +1,28 @@
+<html>
+    <head>
+        <title>Country</title>
+        <script src="https://code.jquery.com/jquery-3.6.1.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/themes/redmond/jquery-ui.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/css/ui.jqgrid.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/jquery.jqgrid.min.js"></script>
+        <script>
+            $(document).ready(function(){
+                $('#tblCountries').jqGrid({
+                    url:'/country',
+                    datatype: 'json',
+                    colModel:[{name:'Id', label:'ID', align:'center'},
+                              {name: 'Name', label:'Country Name', align:'center'}, 
+                              {name: 'Status', label:'Status', align:'center'},
+                              {name: 'Created_By', label:'Created By', align:'center'},
+                              {name: 'Created_Date', label:'Created Date', align:'center'}]
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <h1>List Of All Countries</h1>
+        <table id='tblCountries'></table>
+        <button id="btnGetAllCountries">Get All Country Details</button>
+    </body>
+</html>
