@@ -1,0 +1,46 @@
+from flask import Flask, render_template, request
+import mysql.connector
+mydb = mysql.connector.connect(host="localhost", user="root", password="Admin@1727!", 
+    database= "hospital_management")
+mycursor = mydb.cursor()
+
+app = Flask(__name__)
+ 
+# country = [{'Id':1, 'Name':'India', 'Status':'Y', 'Created_By':'Admin', 'Created_Date':'2022/11/13'}, 
+#            {'Id':2, 'Name':'USA', 'Status':'Y', 'Created_By':'Admin', 'Created_Date':'2022/11/13'}, 
+#            {'Id':3, 'Name':'UK', 'Status':'Y', 'Created_By':'Admin', 'Created_Date':'2022/11/13'}]
+@app.route('/countryhtml')
+def get_country_index():
+    return render_template("country.html")
+
+@app.route('/countryview')
+def get_country_view():
+    return render_template("Countryview.html")
+ 
+@app.route('/country')                           #For jqGrid populate - Getting datas from database
+def get_all_countries():
+    # global country
+    country = []
+    mycursor.execute("select * from tbl_country")
+    myresult = mycursor.fetchall()
+    for i in myresult:
+        country.append(i)
+    return country
+ 
+@app.route('/newCountry', methods=["POST"])       #Inserting new records in database using post method
+def create_new_country():
+    global country
+    Id = request.form.get('Id')
+    Name = request.form.get('Name')
+    Status = request.form.get('Status')
+    Created_By = request.form.get('Created_By')
+    Created_Date = request.form.get('Created_Date')
+    # country.append({'Id':Id, 'Name':Name, 'Status':Status, 'Created_By': Created_By, 'Created_Date': Created_Date})
+    country1 = [(Name, Status, Created_By, Created_Date)]
+    stmt = "Insert into tbl_country (txt_Country_Name, txt_Status, txt_Created_By, dte_Created_Date) \
+    values(%s, %s, %s, %s)"
+    mycursor.executemany(stmt, country1)
+    mydb.commit()
+    return ''
+
+app.run(host='0.0.0.0')
